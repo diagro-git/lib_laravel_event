@@ -26,7 +26,14 @@ class ResendQueuedEvents
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $response = $next($request);
+
+        if($response->isOk() && auth()->check()) {
+            $events = EventCacher::getCachedEvents();
+            if(count($events) > 0) {
+                ResendEvents::dispatch($events);
+            }
+        }
     }
 
     /**
@@ -38,12 +45,12 @@ class ResendQueuedEvents
      */
     public function terminate($request, $response)
     {
-        if($response->isOk() && auth()->check()) {
+        /*if($response->isOk() && auth()->check()) {
             $events = EventCacher::getCachedEvents();
             if(count($events) > 0) {
                 ResendEvents::dispatch($events);
             }
-        }
+        }*/
     }
 
 
