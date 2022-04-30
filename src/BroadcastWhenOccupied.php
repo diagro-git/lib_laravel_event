@@ -25,6 +25,20 @@ trait BroadcastWhenOccupied
      */
     public mixed $user_id;
 
+    /**
+     * Counter how much this event was trying to send.
+     *
+     * @var int
+     */
+    public int $tries = 0;
+
+    /**
+     * Maximum tries before stop.
+     *
+     * @var int
+     */
+    public int $max_tries = 5;
+
 
     /**
      * The name of the channel.
@@ -63,7 +77,10 @@ trait BroadcastWhenOccupied
 
         //cache the event, because this is not broadcasted
         if(! $isOccupied) {
-            EventCacher::putInCache($this);
+            $this->tries += 1;
+            if($this->tries < $this->max_tries) {
+                EventCacher::putInCache($this);
+            }
         }
 
         return $isOccupied;

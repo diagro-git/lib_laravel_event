@@ -1,6 +1,7 @@
 <?php
 namespace Diagro\Events\Jobs;
 
+use Diagro\Events\Cache\Event as EventCacher;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,10 +15,10 @@ class ResendEvents implements ShouldQueue
 
 
     public function __construct(
-        public array $events
+        public array $events,
+        public $userId
     )
     {
-        //$this->onQueue('resend_events');
     }
 
 
@@ -27,6 +28,13 @@ class ResendEvents implements ShouldQueue
             if($event instanceof ShouldBroadcast) {
                 event($event);
             }
+        }
+
+        //any events left?
+        $events = EventCacher::getCachedEvents($this->userId);
+        if(count($events) > 0) {
+            //resend failed events
+            ResendEvents::dispatch($events, $this->userId)->delay(1);
         }
     }
 
