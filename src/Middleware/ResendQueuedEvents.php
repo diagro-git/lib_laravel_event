@@ -32,11 +32,11 @@ class ResendQueuedEvents
     /**
      * If status is OK, then start the resend events job.
      *
-     * @param Request $request
-     * @param Response $response
+     * @param $request
+     * @param $response
      * @return void
      */
-    public function terminate(Request $request, Response $response)
+    public function terminate($request, $response)
     {
         if($response->isOk() && auth()->check()) {
             $events = EventCacher::getCachedEvents();
