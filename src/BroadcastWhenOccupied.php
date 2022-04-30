@@ -18,6 +18,13 @@ use Illuminate\Support\Arr;
 trait BroadcastWhenOccupied
 {
 
+    /**
+     * The auth identifier
+     *
+     * @var mixed
+     */
+    public mixed $user_id;
+
 
     /**
      * The name of the channel.
@@ -70,8 +77,11 @@ trait BroadcastWhenOccupied
      */
     public function broadcastOn(): PresenceChannel
     {
-        $userId = auth()->user()->getAuthIdentifier();
-        return new PresenceChannel($this->channelName() . '.' . $userId);
+        if(empty($this->user_id)) {
+            $this->user_id = auth()->user()->getAuthIdentifier();
+        }
+
+        return new PresenceChannel($this->channelName() . '.' . $this->user_id);
     }
 
 
