@@ -61,10 +61,8 @@ trait BroadcastWhenOccupied
     {
         $isOccupied = $this->isOccupied();
 
-        logger()->debug("when?");
         //cache the event, because this is not broadcasted
         if(! $isOccupied) {
-            logger()->debug("niet bezet");
             EventCacher::putInCache($this);
         }
 
@@ -94,8 +92,7 @@ trait BroadcastWhenOccupied
      */
     protected function isOccupied(): bool
     {
-        return auth()->check() &&
-            $this->getOccupied()?->isOccupied($this->broadcastOn()->name);
+        return $this->getOccupied()?->isOccupied($this->broadcastOn()->name);
     }
 
 
