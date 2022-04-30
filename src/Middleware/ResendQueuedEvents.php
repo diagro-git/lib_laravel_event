@@ -4,7 +4,6 @@ namespace Diagro\Events\Middleware;
 use Closure;
 use Diagro\Events\Jobs\ResendEvents;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Diagro\Events\Cache\Event as EventCacher;
 
 /**
@@ -27,7 +26,6 @@ class ResendQueuedEvents
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-        dd($response);
 
         if($response->isOk() && auth()->check()) {
             $events = EventCacher::getCachedEvents();
@@ -35,23 +33,6 @@ class ResendQueuedEvents
                 ResendEvents::dispatch($events);
             }
         }
-    }
-
-    /**
-     * If status is OK, then start the resend events job.
-     *
-     * @param $request
-     * @param $response
-     * @return void
-     */
-    public function terminate($request, $response)
-    {
-        /*if($response->isOk() && auth()->check()) {
-            $events = EventCacher::getCachedEvents();
-            if(count($events) > 0) {
-                ResendEvents::dispatch($events);
-            }
-        }*/
     }
 
 

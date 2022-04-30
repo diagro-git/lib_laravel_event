@@ -23,7 +23,7 @@ class DiagroEventServiceProvider extends ServiceProvider
         //middleware
         /** @var Router $router */
         $router = $this->app->make(Router::class);
-        $router->pushMiddlewareToGroup('broadcast', ResendQueuedEvents::class);
+        $router->aliasMiddleware('diagro.events.resend', ResendQueuedEvents::class);
 
         //commands
         if ($this->app->runningInConsole()) {
