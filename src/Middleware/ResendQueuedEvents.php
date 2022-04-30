@@ -33,6 +33,8 @@ class ResendQueuedEvents
                 ResendEvents::dispatch($events);
             }
         }
+
+        return $response;
     }
 
 
