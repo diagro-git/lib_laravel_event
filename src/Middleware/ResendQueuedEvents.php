@@ -27,6 +27,7 @@ class ResendQueuedEvents
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
+        dd($response);
 
         if($response->isOk() && auth()->check()) {
             $events = EventCacher::getCachedEvents();
