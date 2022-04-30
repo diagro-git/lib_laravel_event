@@ -26,7 +26,7 @@ class Event
         if(Cache::has($cacheKey)) {
             $cachedValue = Cache::get($cacheKey);
             if(is_array($cachedValue)) {
-                $value = array_merge(Cache::get($cacheKey), $value);
+                $value = array_merge($cachedValue, $value);
             }
         }
 
