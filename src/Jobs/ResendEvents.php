@@ -17,7 +17,7 @@ class ResendEvents implements ShouldQueue
         public array $events
     )
     {
-        $this->onQueue('resend_events');
+        //$this->onQueue('resend_events');
     }
 
 
