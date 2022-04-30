@@ -41,7 +41,6 @@ class Event
 
         if(Cache::has($cacheKey)) {
             $cacheValue = Cache::pull($cacheKey);
-            Cache::forget($cacheKey);
             if(is_array($cacheValue)) {
                 $events = $cacheValue;
             }
