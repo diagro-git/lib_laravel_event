@@ -11,15 +11,15 @@ class Event
 {
 
 
-    public static function getCacheKey(): string
+    public static function getCacheKey($user_id): string
     {
-        return 'events.' . auth()->user()->getAuthIdentifier();
+        return 'events.' . $user_id;
     }
 
 
-    public static function putInCache(ShouldBroadcast $event)
+    public static function putInCache($event)
     {
-        $cacheKey = self::getCacheKey();
+        $cacheKey = self::getCacheKey($event->user_id);
         $value = [$event];
 
         //merge with existence events in the cache
@@ -34,10 +34,10 @@ class Event
     }
 
 
-    public static function getCachedEvents(): array
+    public static function getCachedEvents($user_id): array
     {
         $events = [];
-        $cacheKey = self::getCacheKey();
+        $cacheKey = self::getCacheKey($user_id);
 
         if(Cache::has($cacheKey)) {
             $cacheValue = Cache::pull($cacheKey);
