@@ -31,9 +31,9 @@ trait BroadcastWhenOccupied
      * Get the instance for checking if channel is occupied.
      * Default behaviour is that the factory checks for the broadcasting driver.
      *
-     * @return OccupiedContract
+     * @return OccupiedContract|null
      */
-    protected function getOccupied(): OccupiedContract
+    protected function getOccupied(): ?OccupiedContract
     {
         $broadcastConnection = null;
         if(method_exists($this, 'broadcastConnections')) {
@@ -83,7 +83,7 @@ trait BroadcastWhenOccupied
     protected function isOccupied(): bool
     {
         return auth()->check() &&
-            $this->getOccupied()->isOccupied($this->broadcastOn()->name);
+            $this->getOccupied()?->isOccupied($this->broadcastOn()->name);
     }
 
 
