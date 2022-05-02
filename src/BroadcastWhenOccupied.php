@@ -109,7 +109,7 @@ trait BroadcastWhenOccupied
      */
     protected function isOccupied(): bool
     {
-        return $this->getOccupied()?->isOccupied($this->broadcastOn()->name);
+        return $this->getOccupied()?->isOccupied($this->broadcastOn()->name) ?? false;
     }
 
 
