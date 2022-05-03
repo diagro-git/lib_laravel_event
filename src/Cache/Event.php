@@ -2,7 +2,6 @@
 namespace Diagro\Events\Cache;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 /**
  * Class for caching the events.
@@ -19,8 +18,6 @@ class Event
 
     public static function putInCache($event)
     {
-        $prefix = config('cache.prefix');
-        config()->set('cache.prefix', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache');
         $cacheKey = self::getCacheKey($event->user_id);
         $value = [$event];
 
@@ -33,14 +30,11 @@ class Event
         }
 
         Cache::put($cacheKey, $value);
-        config()->set('cache.prefix', $prefix);
     }
 
 
     public static function getCachedEvents($user_id): array
     {
-        $prefix = config('cache.prefix');
-        config()->set('cache.prefix', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache');
         $events = [];
         $cacheKey = self::getCacheKey($user_id);
 
@@ -51,7 +45,6 @@ class Event
             }
         }
 
-        config()->set('cache.prefix', $prefix);
         return $events;
     }
 
