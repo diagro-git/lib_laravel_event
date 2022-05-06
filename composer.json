@@ -2,7 +2,7 @@
     "name": "diagro/lib_laravel_event",
     "description": "Library which has extensions for Laravel events.",
     "type": "library",
-    "version": "1.4",
+    "version": "1.5",
     "license": "MIT",
     "authors": [
         {
