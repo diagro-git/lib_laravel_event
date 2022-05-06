@@ -28,10 +28,11 @@ class ResendQueuedEvents
         $response = $next($request);
 
         if($response->isOk() && auth()->check()) {
-            $userId = auth()->user()->getAuthIdentifier();
-            $events = EventCacher::getCachedEvents($userId);
+            $companyId = auth()->user()->company()->id();
+            $userId = auth()->user()->id();
+            $events = EventCacher::getCachedEvents($companyId, $userId);
             if(count($events) > 0) {
-                ResendEvents::dispatch($events, $userId);
+                ResendEvents::dispatch($events, $companyId, $userId);
             }
         }
 

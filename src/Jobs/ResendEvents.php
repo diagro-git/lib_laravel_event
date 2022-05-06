@@ -16,6 +16,7 @@ class ResendEvents implements ShouldQueue
 
     public function __construct(
         public array $events,
+        public $companyId,
         public $userId
     )
     {
@@ -32,10 +33,10 @@ class ResendEvents implements ShouldQueue
         }
 
         //any events left?
-        $events = EventCacher::getCachedEvents($this->userId);
+        $events = EventCacher::getCachedEvents($this->companyId, $this->userId);
         if(count($events) > 0) {
             //resend failed events
-            ResendEvents::dispatch($events, $this->userId)->delay(1);
+            ResendEvents::dispatch($events, $this->companyId, $this->userId)->delay(1);
         }
     }
 

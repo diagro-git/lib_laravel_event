@@ -19,11 +19,18 @@ trait BroadcastWhenOccupied
 {
 
     /**
-     * The auth identifier
+     * The user id
      *
      * @var mixed
      */
     public mixed $user_id;
+
+    /**
+     * The company id
+     *
+     * @var mixed
+     */
+    public mixed $company_id;
 
     /**
      * Counter how much this event was trying to send.
@@ -102,10 +109,14 @@ trait BroadcastWhenOccupied
     public function broadcastOn(): PresenceChannel
     {
         if(empty($this->user_id)) {
-            $this->user_id = auth()->user()?->getAuthIdentifier();
+            $this->user_id = auth()->user()?->id();
         }
 
-        return new PresenceChannel($this->channelName() . '.' . $this->user_id);
+        if(empty($this->company_id)) {
+            $this->company_id = auth()->user()?->company()->id();
+        }
+
+        return new PresenceChannel($this->channelName() . '.' . $this->company_id . '.' . $this->user_id);
     }
 
 

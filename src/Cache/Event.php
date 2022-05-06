@@ -11,15 +11,15 @@ class Event
 {
 
 
-    public static function getCacheKey($user_id): string
+    public static function getCacheKey($company_id, $user_id): string
     {
-        return 'events.' . $user_id;
+        return 'events.' . $company_id . '.' . $user_id;
     }
 
 
     public static function putInCache($event)
     {
-        $cacheKey = self::getCacheKey($event->user_id);
+        $cacheKey = self::getCacheKey($event->company_id, $event->user_id);
         $value = ['event' => $event, 'time' => Carbon::now()->getTimestamp(), 'remove_at' => Carbon::now()->addSeconds($event->time_in_cache)->getTimestamp()];
 
         //merge with existence events in the cache
@@ -34,10 +34,10 @@ class Event
     }
 
 
-    public static function getCachedEvents($user_id): array
+    public static function getCachedEvents($company_id, $user_id): array
     {
         $events = [];
-        $cacheKey = self::getCacheKey($user_id);
+        $cacheKey = self::getCacheKey($company_id, $user_id);
 
         if(Cache::has($cacheKey)) {
             $cacheValue = Cache::pull($cacheKey);
