@@ -4,7 +4,7 @@ namespace Diagro\Events;
 abstract class CompanyUserBroadcast
 {
 
-    use BroadcastWhenOccupied;
+    use BroadcastWhenOccupied, OnEventsQueue;
 
 
     public function __construct(?int $company_id = null, ?int $user_id = null)

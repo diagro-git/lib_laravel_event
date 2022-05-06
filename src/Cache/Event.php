@@ -20,7 +20,7 @@ class Event
     public static function putInCache($event)
     {
         $cacheKey = self::getCacheKey($event->company_id, $event->user_id);
-        $value = ['event' => $event, 'time' => Carbon::now()->getTimestamp(), 'remove_at' => Carbon::now()->addSeconds($event->time_in_cache)->getTimestamp()];
+        $value = [['event' => $event, 'time' => Carbon::now()->getTimestamp(), 'remove_at' => Carbon::now()->addSeconds($event->time_in_cache)->getTimestamp()]];
 
         //merge with existence events in the cache
         if(Cache::has($cacheKey)) {
