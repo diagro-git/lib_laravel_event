@@ -1,6 +1,7 @@
 <?php
 namespace Diagro\Events\Cache;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -19,7 +20,7 @@ class Event
     public static function putInCache($event)
     {
         $cacheKey = self::getCacheKey($event->user_id);
-        $value = [$event];
+        $value = ['event' => $event, 'time' => Carbon::now()->getTimestamp(), 'remove_at' => Carbon::now()->addSeconds($event->time_in_cache)->getTimestamp()];
 
         //merge with existence events in the cache
         if(Cache::has($cacheKey)) {
@@ -41,6 +42,13 @@ class Event
         if(Cache::has($cacheKey)) {
             $cacheValue = Cache::pull($cacheKey);
             if(is_array($cacheValue)) {
+                $now = Carbon::now()->getTimestamp();
+                foreach($cacheValue as $entry) {
+                    $diff = $now - $entry['remove_at'];
+                    if($diff > 0) {
+                        $events[] = $entry['event'];
+                    }
+                }
                 $events = $cacheValue;
             }
         }

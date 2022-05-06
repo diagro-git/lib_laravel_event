@@ -19,6 +19,7 @@ class ResendEvents implements ShouldQueue
         public $userId
     )
     {
+        $this->onQueue('events_resend');
     }
 
 

@@ -39,6 +39,13 @@ trait BroadcastWhenOccupied
      */
     public int $max_tries = 5;
 
+    /**
+     * Time this event should exist in cache for resending.
+     *
+     * @var int
+     */
+    public int $time_in_cache = 60;
+
 
     /**
      * The name of the channel.
@@ -95,7 +102,7 @@ trait BroadcastWhenOccupied
     public function broadcastOn(): PresenceChannel
     {
         if(empty($this->user_id)) {
-            $this->user_id = auth()->user()->getAuthIdentifier();
+            $this->user_id = auth()->user()?->getAuthIdentifier();
         }
 
         return new PresenceChannel($this->channelName() . '.' . $this->user_id);
